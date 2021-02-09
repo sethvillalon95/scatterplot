@@ -29,7 +29,6 @@ public class Main extends JFrame {
         setTitle("Put the title of your program here");
         setVisible(true);
         
-        Dot test = new Dot(1,2,3,4);
     }
 
     //select count(*) from derbyDB

@@ -26,6 +26,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private Point corner;
     private List<Point2D> scatterData;
     private List<Point2D> relativeScatterData;
+    private AllDots dots;
 
     public Vis() {
         super();
@@ -36,6 +37,8 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         addMouseListener(this);
         addMouseMotionListener(this);
         box = null;
+        dots = new AllDots();
+
     }
 
     public void setText(String t) {
@@ -106,12 +109,15 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         final int h = getHeight();
         final int w = getWidth();
         for (var jerico : relativeScatterData) {
-            int x = (int)(jerico.getX() * w);
-            int y = (int)(h - (jerico.getY() * h));
-            g.fillOval(x, y, 5, 5);
+            double x = (jerico.getX() * w*.9);
+            double y = (h - (jerico.getY() * h*.9));
+//            g.fillOval(x, y, 5, 5);
+            dots.newDot(x, y, x, y);
+//            System.out.println("Printing x and y pos: "+x+" y: "+y);
         }
-        
+        //this draws the line 
         drawLine(g);
+        dots.draw(g);
 
 /*        int y=h, x;
         int howManyBars = relativeData.keySet().size();
@@ -135,6 +141,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         g.setColor(Color.RED);
         g.fill(seth);
 */
+//        g.fill(seth);
         if (box != null) {
             g.setColor(Color.BLUE);
             g.draw(box);

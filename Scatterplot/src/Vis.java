@@ -42,6 +42,20 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         textToDisplay = t;
         repaint();
     }
+    
+    private void drawLine(Graphics g) {
+    	
+    	int w = getWidth();
+    	int h = getHeight();
+        // draw the vertical line on the left
+        int xLine =(int)(w*.05);
+        int yLine =(int)(h*.96);
+        // vertical line;
+        g.drawLine(xLine, 0, xLine, yLine);
+        repaint();
+        //horizontal line; 
+        g.drawLine(xLine,yLine,w,yLine);
+    }
 
     public void setData(Map<String, Double> acacia) {
         data = acacia;
@@ -94,8 +108,10 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         for (var jerico : relativeScatterData) {
             int x = (int)(jerico.getX() * w);
             int y = (int)(h - (jerico.getY() * h));
-            g.fillRect(x, y, 5, 5);
+            g.fillOval(x, y, 5, 5);
         }
+        
+        drawLine(g);
 
 /*        int y=h, x;
         int howManyBars = relativeData.keySet().size();
@@ -118,12 +134,12 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         g.setColor(Color.RED);
         g.fill(seth);
-
+*/
         if (box != null) {
             g.setColor(Color.BLUE);
             g.draw(box);
         }
- */
+ 
     }
 
     @Override

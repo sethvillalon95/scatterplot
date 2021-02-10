@@ -18,11 +18,15 @@ public class AllDots {
 	
 	public void draw(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
-        
         // draws all the dots
+
         for(Dot d:dots) {
         	d.draw(g);
         }
+      if(!dots.isEmpty()) {
+    	dots.clear();
+      }
+        
 	}
 	
 	//should return trur or false;
@@ -32,12 +36,15 @@ public class AllDots {
         	if(d.isIn(x,y)) {
         		// print the label
 //        		output = d.dotValues(colX, colY);
-        		
         		output =colX+": "+d.xValue()+" "+colY+": "+d.yValue();
+        		
+//        		System.out.println("hovering");
+                return output;
+
         	}
         }
+        return null;
         
-        return output;
 	}
 	
 	// create another method the returns one line String

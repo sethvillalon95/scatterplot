@@ -24,7 +24,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private Ellipse2D.Double seth;
     private Rectangle box;
     private Point corner;
-    private List<Point2D> scatterData;
+//    private List<Point2D> scatterData;
     private List<Point2D> relativeScatterData;
     private AllDots dots;
     String colX;
@@ -56,6 +56,23 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     	dots.setCols(q1,q2);
 //    	System.out.println(colX+""+colY);
     }
+	public void clearMap() {
+		System.out.println("clearMap ran");
+//		System.out.println("Relative data is: "+ relativeScatterData.size());
+		if(!relativeScatterData.isEmpty()) {
+//			scatterData.clear();
+			relativeScatterData.clear();
+			System.out.println("I cleared the data");
+			System.out.println("Relative data is: "+ relativeScatterData.size());
+			repaint();
+		}else {
+			System.out.println("The data is empty");
+		}
+//		if(!relativeScatterData.isEmpty()&&!scatterData.isEmpty()) {
+//			relativeScatterData.clear();
+//		}
+		
+	}
 
     public void setText(String t) {
         textToDisplay = t;
@@ -63,6 +80,20 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     }
     
     private void drawLine(Graphics g) {
+    	
+    	int w = getWidth();
+    	int h = getHeight();
+        // draw the vertical line on the left
+        int xLine =(int)(w*.05);
+        int yLine =(int)(h*.96);
+        // vertical line;
+        g.drawLine(xLine, 0, xLine, yLine);
+//        repaint();
+        //horizontal line; 
+        g.drawLine(xLine,yLine,w,yLine);
+    }
+    
+    private void drawAxVals(Graphics g) {
     	
     	int w = getWidth();
     	int h = getHeight();
@@ -92,21 +123,24 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     }
 
     public void setData(List<Point2D> acacia) {
+//    	relativeScatterData.clear();
+
         double maxX = 0;
         double maxY = 0;
+        double adjuster = .85;
         for (var kaipo : acacia) {
             if (kaipo.getX() > maxX) {
                 maxX = kaipo.getX();
-                xValRev =kaipo.getX();
+                xValRev =kaipo.getX()/adjuster;
                 
             }
             if (kaipo.getY() > maxY) {
                 maxY = kaipo.getY();
-                yValRev = kaipo.getY();
+                yValRev = kaipo.getY()/adjuster;
             }
         }
         for (var kaipo : acacia) {
-            var gilmo = new Point2D.Double(kaipo.getX() / maxX, kaipo.getY() / maxY);
+            var gilmo = new Point2D.Double(kaipo.getX() / maxX*adjuster, kaipo.getY() / maxY*adjuster);
             relativeScatterData.add(gilmo);
         }
         repaint();
@@ -118,7 +152,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         Graphics2D g = (Graphics2D)g1;
 
         //draw blank background
-        g.setColor(Color.WHITE);
+        g.setColor(Color.RED);
         g.fillRect(0, 0, getWidth(), getHeight());
 
         //render visualization
@@ -127,15 +161,20 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         final int h = getHeight();
         final int w = getWidth();
-        for (var data : relativeScatterData) {
-            double x = (data.getX() * w*.9);
-            double y = (h - (data.getY() * h*.9));
+		System.out.println("Relative data before printing is: "+ relativeScatterData.size());
+
+        for (var myData : relativeScatterData) {
+            double x = (myData.getX() * w);
+            double y = (h - (myData.getY() * h));
 //            g.fillOval(x, y, 5, 5);
-            double xVal = data.getX()*xValRev;
-            double yVal = data.getX()*yValRev;
+            double xVal = myData.getX()*xValRev;
+            double yVal = myData.getY()*yValRev;
+//            System.out.println("From the Vis"+xVal+" "+yVal);
+
             dots.newDot(x, y, xVal, yVal);
 //            System.out.println("Printing x and y pos: "+x+" y: "+y);
         }
+//        System.out.println("**********end******************");
         //this draws the line 
         drawLine(g);
         dots.draw(g);

@@ -210,11 +210,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     public void mouseMoved(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        if (seth.contains(x,y)) {
-            //System.out.println("Hello, Seth's ellipse!");
-            setToolTipText("Hello from " + x + "," + y);
-        } else {
-            setToolTipText(null);
-        }
+        String s =dots.attributes(x,y);
+        setToolTipText(s);
     }
 }

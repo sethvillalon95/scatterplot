@@ -47,5 +47,15 @@ public class Dot {
 		return output;
 	}
 	
+	public String  xValue() {
+		String s = String.format("%.1f", xVal);
+		return s;
+	}
+	
+	public String  yValue() {
+		String s = String.format("%.1f", yVal);
+		return s;
+	}
+	
 
 }

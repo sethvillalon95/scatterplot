@@ -26,12 +26,14 @@ public class AllDots {
 	}
 	
 	//should return trur or false;
-	public String doesContain(int x, int y) {
+	public String attributes(int x, int y) {
 		String output ="";
         for(Dot d:dots) {
         	if(d.isIn(x,y)) {
         		// print the label
-        		output = d.dotValues(colX, colY);
+//        		output = d.dotValues(colX, colY);
+        		
+        		output =colX+": "+d.xValue()+" "+colY+": "+d.yValue();
         	}
         }
         
@@ -40,6 +42,7 @@ public class AllDots {
 	
 	// create another method the returns one line String
 	
+	// this is the column name
 	public void setCols(String col1, String col2) {
 		colX=col1;
 		colY=col2;

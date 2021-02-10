@@ -29,6 +29,8 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private AllDots dots;
     String colX;
     String colY;
+    int startH =600;
+    int startW=800;
     // the revversers are to cancel out the max value to get the raw value from the scatterData
     double xValRev,yValRev;
 
@@ -145,14 +147,23 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         }
         repaint();
     }
+    
+    private void resetDotsPos(int ht, int wd) {
+    	if(startH!=ht||startW!=wd) {
+    		dots.resetList();
+    	}
+    }
 
 
     @Override
     public void paintComponent(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
+       
+
+        
 
         //draw blank background
-        g.setColor(Color.RED);
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
 
         //render visualization
@@ -161,6 +172,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         final int h = getHeight();
         final int w = getWidth();
+        resetDotsPos(h,w);
 		System.out.println("Relative data before printing is: "+ relativeScatterData.size());
 
         for (var myData : relativeScatterData) {

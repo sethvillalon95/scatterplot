@@ -16,6 +16,12 @@ public class AllDots {
 		dots.add(new Dot(xPos,yPos,xVal,yVal));
 	}
 	
+	public void resetList() {
+      if(!dots.isEmpty()) {
+    	dots.clear();
+      }
+	}
+	
 	public void draw(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
         // draws all the dots
@@ -23,22 +29,21 @@ public class AllDots {
         for(Dot d:dots) {
         	d.draw(g);
         }
-      if(!dots.isEmpty()) {
-    	dots.clear();
-      }
+
         
 	}
 	
 	//should return trur or false;
 	public String attributes(int x, int y) {
 		String output ="";
+		
         for(Dot d:dots) {
         	if(d.isIn(x,y)) {
         		// print the label
 //        		output = d.dotValues(colX, colY);
         		output =colX+": "+d.xValue()+" "+colY+": "+d.yValue();
         		
-//        		System.out.println("hovering");
+        		System.out.println("hovering");
                 return output;
 
         	}

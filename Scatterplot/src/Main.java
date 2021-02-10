@@ -15,6 +15,8 @@ import javax.swing.JMenuItem;
 public class Main extends JFrame {
 
     private Vis mainPanel;
+    String columnX;
+    String columnY;
 
     public Main() {
 
@@ -91,9 +93,13 @@ public class Main extends JFrame {
         JMenuItem item2 = new JMenuItem("Item 2");
 
         item3.addActionListener(e -> {
-            var sethQuery = "SELECT CREDITS_ATTEMPTED, CREDITS_PASSED from cis";
+        	
+        	columnX="CREDITS_ATTEMPTED";
+        	columnY="CREDITS_PASSED";
+            var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis";
             var gilmo = performTwoNumberQuery(sethQuery);
             mainPanel.setData(gilmo);
+            mainPanel.setQuery(columnY, columnX);
         });
 
 

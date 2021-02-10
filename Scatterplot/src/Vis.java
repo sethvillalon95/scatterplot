@@ -27,6 +27,10 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private List<Point2D> scatterData;
     private List<Point2D> relativeScatterData;
     private AllDots dots;
+    String colX;
+    String colY;
+    // the revversers are to cancel out the max value to get the raw value from the scatterData
+    double xValRev,yValRev;
 
     public Vis() {
         super();
@@ -38,7 +42,19 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         addMouseMotionListener(this);
         box = null;
         dots = new AllDots();
+        colX="";
+        colY="";
+        xValRev=0;
+        yValRev=0;
 
+    }
+    
+    // this is used for hover effects 
+    public void setQuery(String q1, String q2) {
+    	colX = q1;
+    	colY = q2;
+    	dots.setCols(q1,q2);
+//    	System.out.println(colX+""+colY);
     }
 
     public void setText(String t) {
@@ -81,9 +97,12 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         for (var kaipo : acacia) {
             if (kaipo.getX() > maxX) {
                 maxX = kaipo.getX();
+                xValRev =kaipo.getX();
+                
             }
             if (kaipo.getY() > maxY) {
                 maxY = kaipo.getY();
+                yValRev = kaipo.getY();
             }
         }
         for (var kaipo : acacia) {
@@ -108,11 +127,13 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         final int h = getHeight();
         final int w = getWidth();
-        for (var jerico : relativeScatterData) {
-            double x = (jerico.getX() * w*.9);
-            double y = (h - (jerico.getY() * h*.9));
+        for (var data : relativeScatterData) {
+            double x = (data.getX() * w*.9);
+            double y = (h - (data.getY() * h*.9));
 //            g.fillOval(x, y, 5, 5);
-            dots.newDot(x, y, x, y);
+            double xVal = data.getX()*xValRev;
+            double yVal = data.getX()*yValRev;
+            dots.newDot(x, y, xVal, yVal);
 //            System.out.println("Printing x and y pos: "+x+" y: "+y);
         }
         //this draws the line 

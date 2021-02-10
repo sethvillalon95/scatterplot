@@ -19,6 +19,7 @@ public class Dot {
 		this.xVal = xVal; 
 		this.yVal = yVal;
 		theDot = new Ellipse2D.Double(xPos, yPos, 5, 5);
+		theDot.contains(xVal, yVal);
 //		System.out.println("xPos: "+ xPos+" yPos: "+ yPos+" xVal: "+xVal+" yVal: " +yVal);
 //		theDot = new Ellipse2D.Double(50, 50, 5, 5);
 
@@ -28,7 +29,22 @@ public class Dot {
         Graphics2D g = (Graphics2D)g1;
 //        g.setColor(Color.BLACK);
 		g.fill(theDot);
+		
 //		System.out.println("The draw method from the Dot ran");
+	}
+	
+	public boolean isIn(int x, int y) {
+		if(theDot.contains(x,y)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public String dotValues(String qX, String qY) {
+		String output="";
+		output=qX+": "+Double.toString(xVal)+" "+qY+": "+Double.toString(yVal);
+		return output;
 	}
 	
 

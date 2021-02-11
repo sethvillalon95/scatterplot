@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Collections;
+
 
 import javax.swing.JPanel;
 
@@ -26,28 +28,66 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private Point corner;
 //    private List<Point2D> scatterData;
     private List<Point2D> relativeScatterData;
+    private List<Double> xCoords;
+    private List<Double> yCoords;
+
     private AllDots dots;
     String colX;
     String colY;
+    
+    // values of the window
     int startH =600;
     int startW=800;
+    
+    // heght and width 
+    double winH;
+    double winW;
+    
+    double p1x, p1y, p2x,p2y;
+    double rel_p1x, rel_p1y, rel_p2x,rel_p2y;
     // the revversers are to cancel out the max value to get the raw value from the scatterData
     double xValRev,yValRev;
 
     public Vis() {
         super();
         textToDisplay = "There's nothing to see here.";
+        
         relativeData = new HashMap<>();
         relativeScatterData = new ArrayList<>();
+        
+        // 
+        xCoords = new ArrayList<>();
+        yCoords = new ArrayList<>();
+
+        
         seth = new Ellipse2D.Double(50, 100, 40, 40);
+        
         addMouseListener(this);
         addMouseMotionListener(this);
+        
         box = null;
         dots = new AllDots();
+        
         colX="";
         colY="";
+        
         xValRev=0;
         yValRev=0;
+        
+        //zoom features vars
+        p1x= 0;
+        p1y= 0;
+        p2x= 0;
+        p2y= 0;
+        
+        //relative pos coordinates 
+        rel_p1x= 0;
+        rel_p1y= 0;
+        rel_p2x= 0;
+        rel_p2y= 0;
+        
+        winH= 0;
+        winW= 0;
 
     }
     
@@ -172,12 +212,20 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         final int h = getHeight();
         final int w = getWidth();
+        winH=h;
+        winW=w;
         resetDotsPos(h,w);
 		System.out.println("Relative data before printing is: "+ relativeScatterData.size());
 
         for (var myData : relativeScatterData) {
             double x = (myData.getX() * w);
             double y = (h - (myData.getY() * h));
+            
+            //*********************************need to clear********************************
+            xCoords.add(x);
+            yCoords.add(y);
+            
+            
 //            g.fillOval(x, y, 5, 5);
             double xVal = myData.getX()*xValRev;
             double yVal = myData.getY()*yValRev;
@@ -187,33 +235,15 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 //            System.out.println("Printing x and y pos: "+x+" y: "+y);
         }
 //        System.out.println("**********end******************");
+        Collections.sort(xCoords); 
+        Collections.sort(yCoords); 
+        
         //this draws the line 
         drawLine(g);
         dots.draw(g);
+        
+        
 
-/*        int y=h, x;
-        int howManyBars = relativeData.keySet().size();
-        int[] kaipoY = new int[howManyBars];
-        int[] kaipoX = new int[howManyBars];
-        int xSpacing = getWidth() / (howManyBars+1);
-        x = xSpacing;
-        int i=0;
-        for (var jerico : relativeData.keySet()) {
-            double barWidth = h * relativeData.get(jerico);
-            //uncomment this line for bar charts
-            //g.drawLine(x,y, x, y-(int)barWidth);
-            kaipoY[i] = y-(int)barWidth;
-            kaipoX[i] = x;
-            x += xSpacing;
-            i++;
-        }
-        //comment out this line for bar charts
-        g.drawPolyline(kaipoX, kaipoY, howManyBars);
-
-        g.setColor(Color.RED);
-        g.fill(seth);
-*/
-//        g.fill(seth);
         if (box != null) {
             g.setColor(Color.BLUE);
             g.draw(box);
@@ -230,12 +260,26 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     public void mousePressed(MouseEvent e) {
         corner = new Point(e.getX(), e.getY());
         //create a new rectangle anchored at "corner"
+        p1x=e.getX();
+        p1y=e.getY();
+        
+        rel_p1x=p1x/winW;
+        rel_p1y=p1y/winH;
         box = new Rectangle(corner);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         box = null;
+        p2x = e.getX();
+        p2y = e.getY();
+        
+        rel_p2x=p2x/winW;
+        rel_p2y=p2y/winH;
+        
+        
+        
+        
         repaint();
     }
 

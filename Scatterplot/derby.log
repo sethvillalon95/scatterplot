@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Wed Feb 10 13:32:11 HST 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0177-8e49-b64d-00000ed0ccb0 
-on database directory C:\Users\sethv\OneDrive\Desktop\CS 490R Data Visualization\scatterplot\Scatterplot\scatterPlot with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@443b7951 
+Wed Feb 10 23:25:29 HST 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0177-9068-e324-000000cb2780 
+on database directory C:\Users\sethv\OneDrive\Desktop\CS 490R Data Visualization\scatterplot\Scatterplot\scatterPlot with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@e73f9ac 
 Loaded from file:/C:/Apache/db-derby-10.14.2.0-bin/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=15.0.1+9-18

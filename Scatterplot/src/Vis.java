@@ -9,6 +9,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -28,8 +29,8 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     private Point corner;
 //    private List<Point2D> scatterData;
     private List<Point2D> relativeScatterData;
-    private List<Double> xCoords;
-    private List<Double> yCoords;
+    private double [] xCoords;
+    private double [] yCoords;
 
     private AllDots dots;
     String colX;
@@ -47,6 +48,11 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     double rel_p1x, rel_p1y, rel_p2x,rel_p2y;
     // the revversers are to cancel out the max value to get the raw value from the scatterData
     double xValRev,yValRev;
+    
+    double minX, maxX, minY, maxY;
+    double newMinX, newMaxX, newMinY,newMaxY;
+    double rangeX, rangeY, newRangeX,newRangeY;
+    
 
     public Vis() {
         super();
@@ -56,8 +62,8 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         relativeScatterData = new ArrayList<>();
         
         // 
-        xCoords = new ArrayList<>();
-        yCoords = new ArrayList<>();
+        xCoords = new double[116];
+        yCoords = new double[116];
 
         
         seth = new Ellipse2D.Double(50, 100, 40, 40);
@@ -88,6 +94,24 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         
         winH= 0;
         winW= 0;
+        
+        minX= 0;
+        maxX= 0;
+        minY= 0;
+        maxY= 0;
+        
+        minX= 0;
+        maxX= 0;
+        minY= 0;
+        maxY= 0;
+        newMinX= 0;
+        newMaxX= 0;
+        newMinY= 0;
+        newMaxY= 0;
+        rangeX= 0;
+        rangeY= 0;
+        newRangeX= 0;
+        newRangeY= 0;
 
     }
     
@@ -169,7 +193,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         double maxX = 0;
         double maxY = 0;
-        double adjuster = .85;
+        double adjuster = .95;
         for (var kaipo : acacia) {
             if (kaipo.getX() > maxX) {
                 maxX = kaipo.getX();
@@ -215,28 +239,42 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         winH=h;
         winW=w;
         resetDotsPos(h,w);
-		System.out.println("Relative data before printing is: "+ relativeScatterData.size());
-
+//		System.out.println("Relative data before printing is: "+ relativeScatterData.size());
+		int i = 0;
         for (var myData : relativeScatterData) {
             double x = (myData.getX() * w);
             double y = (h - (myData.getY() * h));
+            xCoords[i]=x;
+            yCoords[i]=y;
+            
+            
             
             //*********************************need to clear********************************
-            xCoords.add(x);
-            yCoords.add(y);
+//            xCoords.add(x);
+//            yCoords.add(y);
+            
             
             
 //            g.fillOval(x, y, 5, 5);
             double xVal = myData.getX()*xValRev;
             double yVal = myData.getY()*yValRev;
-//            System.out.println("From the Vis"+xVal+" "+yVal);
+//          System.out.println("From the Vis "+xVal+" "+yVal);
+//          if(xVal == 0 && yVal==0) {
+//              System.out.println("***************Printing the coords of 0: "+x+" "+y);
+//      
+//
+//          }
 
             dots.newDot(x, y, xVal, yVal);
 //            System.out.println("Printing x and y pos: "+x+" y: "+y);
+            i++;
         }
 //        System.out.println("**********end******************");
-        Collections.sort(xCoords); 
-        Collections.sort(yCoords); 
+//        Collections.sort(xCoords); 
+//        Collections.sort(yCoords); 
+        // sort the arrray
+        Arrays.sort(xCoords);
+        Arrays.sort(yCoords);
         
         //this draws the line 
         drawLine(g);
@@ -248,7 +286,9 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
             g.setColor(Color.BLUE);
             g.draw(box);
         }
- 
+        
+//        System.out.println("The newMinx is "+ newMinX+"which shouldnt be 0");
+        zoomAux();
     }
 
     @Override
@@ -298,6 +338,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         int x = e.getX();
         int y = e.getY();
         box.setFrameFromDiagonal(corner.x, corner.y, x, y);
+        zoom();
         repaint();
     }
 
@@ -307,5 +348,66 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         int y = e.getY();
         String s =dots.attributes(x,y);
         setToolTipText(s);
+    }
+    
+    
+
+    private void zoom() {
+    	// x coordinates
+    	minX = xCoords[0];
+    	maxX = xCoords[xCoords.length-1];
+    	rangeX =maxX-minX;
+    	newMinX = (rel_p1x*rangeX)+minX;
+    	newMaxX = (rel_p2x*rangeX)+maxX;
+    	newRangeX=newMaxX-newMinX;
+    
+    	//y coordinates
+    	minY = yCoords[0];
+    	maxY = yCoords[yCoords.length-1];
+    	rangeY = maxY-minY;
+    	newMinY = (rel_p1y*rangeY)+minY;
+    	newMaxY = (rel_p2y*rangeY)+maxY;
+    	newRangeY=newMaxY-newMinY;
+
+    	
+    }
+    
+    private void zoomAux() {
+    	if(newMinX!=0) {
+//    		for(var sd : relativeScatterData) {
+////        		double newX = 
+//    		}
+    		int i=0;
+    		for (var myData : relativeScatterData) {
+                double x = (myData.getX() * winW);
+                double y = (winH - (myData.getY() * winH));
+                xCoords[i]=x;
+                yCoords[i]=y;
+                
+                
+                
+                //*********************************need to clear********************************
+//                xCoords.add(x);
+//                yCoords.add(y);
+                
+                
+                
+//                g.fillOval(x, y, 5, 5);
+                double xVal = myData.getX()*xValRev;
+                double yVal = myData.getY()*yValRev;
+//              System.out.println("From the Vis "+xVal+" "+yVal);
+//              if(xVal == 0 && yVal==0) {
+//                  System.out.println("***************Printing the coords of 0: "+x+" "+y);
+//          
+    //
+//              }
+
+                dots.newDot(x, y, xVal, yVal);
+//                System.out.println("Printing x and y pos: "+x+" y: "+y);
+                i++;
+            }
+    		
+    		
+    	}
     }
 }

@@ -18,18 +18,23 @@ public class AllDots {
 	
 	public void resetList() {
       if(!dots.isEmpty()) {
-    	dots.clear();
+    	dots.clear(); 
 
       }
 	}
 	 
 	public void draw(Graphics g1) {
         Graphics2D g = (Graphics2D)g1;
-        // draws all the dots
+        // draws all the dots 
 
         for(Dot d:dots) {
         	d.draw(g);
-            System.out.println("From the all dots object "+d.xPos+" "+d.xPos);
+        	double testx = d.xPos;
+        	double testy =d.yPos;
+        	if(0<testx && testy>0) {
+//                System.out.println("From the all dots object "+d.xPos+" "+d.xPos);
+
+        	}
 
 //        	System.out.println("Drawing d: "+ d);
         }

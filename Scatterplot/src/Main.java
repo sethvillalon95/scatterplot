@@ -99,7 +99,6 @@ public class Main extends JFrame {
 
         item3.addActionListener(e -> {
         	mainPanel.clearMap();
-        	mainPanel.setText(".");
         	columnX="CREDITS_ATTEMPTED";
         	columnY="CREDITS_PASSED";
             var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis2019";
@@ -116,7 +115,7 @@ public class Main extends JFrame {
                 System.out.println("Just clicked menu item 1");
                 int gilmo = runSimpleCountQuery("SELECT COUNT(*) FROM cis2019");
                 System.out.println("I found " + gilmo + " rows in the table.");
-                mainPanel.setText("I found " + gilmo + " rows in the table.");
+//                mainPanel.setText("I found " + gilmo + " rows in the table.");
             }
         });
         item2.addActionListener(new ActionListener() {
@@ -154,7 +153,7 @@ public class Main extends JFrame {
             	mainPanel.clearMap();
             	columnX="CREDITS_ATTEMPTED";
             	columnY="GPA";
-                var sethQuery = "SELECT CREDITS_ATTEMPTED,GPA from cis2019";
+                var sethQuery = "SELECT CREDITS_PASSED,GPA from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
                 mainPanel.setData(gilmo);
                 mainPanel.setQuery(columnY, columnX);
@@ -170,9 +169,9 @@ public class Main extends JFrame {
             	mainPanel.clearMap();
             	columnX="AGE";
             	columnY="GPA";
-                var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis2019";
+                var sethQuery = "SELECT AGE,GPA from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
-                mainPanel.setData(gilmo);
+                mainPanel.setData(gilmo); 
                 mainPanel.setQuery(columnY, columnX);
             }
         });
@@ -185,7 +184,7 @@ public class Main extends JFrame {
             	mainPanel.clearMap();
             	columnX="GPA";
             	columnY="AGE";
-                var sethQuery = "SELECT CREDITS_PASSED,CREDITS_ATTEMPTED from cis2019";
+                var sethQuery = "SELECT CREDITS_ATTEMPTED,GPA from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
                 mainPanel.setData(gilmo);
                 mainPanel.setQuery(columnY, columnX);

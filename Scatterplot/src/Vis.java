@@ -57,11 +57,15 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
     double rangeX, rangeY, newRangeX,newRangeY;
     
     boolean resize;
+    double maxValX;
+    double maxValY = 0;
+    double highY = 0;
     
+
 
     public Vis() {
         super();
-        textToDisplay = "There's nothing to see here.";
+//        textToDisplay = "There's nothing to see here.";
         
         relativeData = new HashMap<>();
         relativeScatterData = new ArrayList<>();
@@ -122,6 +126,8 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         newRangeX= 0;
         newRangeY= 0;
         
+        maxValX=0;
+        
         resize=false;
 
     }
@@ -151,10 +157,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 		
 	}
 
-    public void setText(String t) {
-        textToDisplay = t;
-        repaint();
-    }
+
     
     private void drawLine(Graphics g) {
     	
@@ -170,18 +173,49 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
         g.drawLine(xLine,yLine,w,yLine);
     }
     
-    private void drawAxVals(Graphics g) {
+    private void drawYVals(Graphics g, double largestHeight,double max_num) {
     	
     	int w = getWidth();
     	int h = getHeight();
         // draw the vertical line on the left
-        int xLine =(int)(w*.05);
+        int  xLine =(int)(w*.001);
         int yLine =(int)(h*.96);
-        // vertical line;
-        g.drawLine(xLine, 0, xLine, yLine);
-        repaint();
-        //horizontal line; 
-        g.drawLine(xLine,yLine,w,yLine);
+
+        double multiplier =1;
+        double yMultiplier =1;
+        for(int j=0; j<4;j++) {
+        	 String yValue = String.format("%.2f",max_num*multiplier);
+             int yPosAxis = (int)(largestHeight*yMultiplier+10);
+
+             g.drawString(yValue, xLine,yPosAxis);
+             System.out.println("The yPosAxis is "+yPosAxis);
+             multiplier-=.25;    
+             yMultiplier+=20;
+        }
+        g.drawString("0.00", xLine, yLine);
+    }
+    
+    private void drawXVals(Graphics g, double highestYP, double highestValY) {
+    	int w = getWidth();
+    	int h = getHeight();
+    	double addToY = highestValY/4;
+    	highestValY = highestValY/4;
+    	
+        int  xLine =(int)(w*.25);
+        int addToXPos =(int)(w*.20);
+        int yLine =(int)(h*.98);
+
+        for(int i = 0; i<4; i++) {
+        	String stringVal = String.format("%.2f",highestValY);
+            g.drawString(stringVal, xLine,yLine);
+            xLine +=addToXPos; 
+            
+
+        	highestValY +=addToY;
+        	
+        }
+
+    	
     }
 
     public void setData(Map<String, Double> acacia) {
@@ -204,20 +238,24 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         double maxX = 0;
         double maxY = 0;
-        double adjuster = .95;
+        double xadjuster = .98;
+        double yadjuster =.99;
         for (var kaipo : acacia) {
             if (kaipo.getX() > maxX) {
                 maxX = kaipo.getX();
-                xValRev =kaipo.getX()/adjuster;
+                maxValX=maxX;
+                xValRev =kaipo.getX()/xadjuster;
                 
             }
             if (kaipo.getY() > maxY) {
                 maxY = kaipo.getY();
-                yValRev = kaipo.getY()/adjuster;
+                maxValY = maxY;
+                yValRev = kaipo.getY()/yadjuster;
+                
             }
         }
         for (var kaipo : acacia) {
-            var gilmo = new Point2D.Double(kaipo.getX() / maxX*adjuster, kaipo.getY() / maxY*adjuster);
+            var gilmo = new Point2D.Double(kaipo.getX() / maxX*xadjuster, kaipo.getY() / maxY*yadjuster);
             relativeScatterData.add(gilmo);
         }
         repaint();
@@ -243,7 +281,6 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
         //render visualization
         g.setColor(Color.BLACK);
-        g.drawString(textToDisplay, 10, 20);
 
         final int h = getHeight();
         final int w = getWidth();
@@ -257,7 +294,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 //			System.out.println(resize); 
 				x_Coords.clear();
 				y_Coords.clear();
-		        for (var myData : relativeScatterData) {
+		        for (var myData : relativeScatterData) { 
 		            double x = (myData.getX() * w);
 		            double y = (h - (myData.getY() * h));
 		            x_Coords.add(x);
@@ -265,6 +302,14 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 
 		            double xVal = myData.getX()*xValRev;
 		            double yVal = myData.getY()*yValRev;
+		            
+		            if(xVal == maxValX) {
+		            	System.out.println("Xval : "+xVal +" maxValX "+ maxValX);
+		                highY = x;
+		            	System.out.println("Xval : "+xVal +" maxValX "+ maxValX);
+
+
+		            }
 //		          System.out.println("From the Vis "+xVal+" "+yVal);
 //		          if(xVal == 0 && yVal==0) {
 //		              System.out.println("***************Printing the coords of 0: "+x+" "+y);
@@ -316,7 +361,7 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 	    		
 	    		resize=false;
 	    		System.out.println("The size of the dots list is :"+dots.size());
-		        dots.draw(g);
+		        dots.draw(g); 
 
 	    	}
 
@@ -325,14 +370,28 @@ public class Vis extends JPanel implements MouseListener, MouseMotionListener {
 //        zoomAux();
         //this draws the line 
         drawLine(g);
-//        dots.draw(g);
-//        zoomAux(g);
+        int listXsize=x_Coords.size();
+        int listYsize=y_Coords.size();
+        if(listXsize!=0 && listYsize!=0 ) {
+        	Collections.sort(x_Coords);
+            Collections.sort(y_Coords);
+            double highY = y_Coords.get(0);
+            double highX = x_Coords.get(0);
+            System.out.println(maxValY+" "+highY);
+            
+        	drawYVals(g,highY,maxValY);
+        	drawXVals(g,highX,maxValX);
+        	
+        	
+        }
 
+
+
+         
         
         
-
         if (box != null) {
-            g.setColor(Color.BLUE);
+            g.setColor(Color.CYAN);
             g.draw(box);
         }
         

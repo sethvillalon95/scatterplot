@@ -5,7 +5,7 @@ import java.awt.geom.Ellipse2D;
 
 public class Dot {
 	// the x and y position for this object
-	private double xPos,yPos;
+	public double xPos,yPos;
 	// the x and y values; 
 	private double xVal, yVal;
 	private Ellipse2D.Double theDot;
@@ -29,7 +29,8 @@ public class Dot {
 //        g.fillOval((int)xPos, (int)yPos, 5, 5);
         g.setColor(Color.BLACK);
 		g.fill(theDot);
-		
+//        System.out.println("From the dot object "+xPos+" "+xPos);
+ 
 //		System.out.println("The draw method from the Dot ran");
 	}
 	

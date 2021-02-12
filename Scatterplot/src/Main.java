@@ -153,8 +153,8 @@ public class Main extends JFrame {
             public void actionPerformed(ActionEvent e) {
             	mainPanel.clearMap();
             	columnX="CREDITS_ATTEMPTED";
-            	columnY="CREDITS_PASSED";
-                var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis2019";
+            	columnY="GPA";
+                var sethQuery = "SELECT CREDITS_ATTEMPTED,GPA from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
                 mainPanel.setData(gilmo);
                 mainPanel.setQuery(columnY, columnX);
@@ -168,8 +168,8 @@ public class Main extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             	mainPanel.clearMap();
-            	columnX="CREDITS_ATTEMPTED";
-            	columnY="CREDITS_PASSED";
+            	columnX="AGE";
+            	columnY="GPA";
                 var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
                 mainPanel.setData(gilmo);
@@ -178,14 +178,14 @@ public class Main extends JFrame {
         });
         
         
-        //# Students per GPA
+        //# Credits Passed vs AGE
         item7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	mainPanel.clearMap();
-            	columnX="CREDITS_ATTEMPTED";
-            	columnY="CREDITS_PASSED";
-                var sethQuery = "SELECT CREDITS_ATTEMPTED,CREDITS_PASSED from cis2019";
+            	columnX="GPA";
+            	columnY="AGE";
+                var sethQuery = "SELECT CREDITS_PASSED,CREDITS_ATTEMPTED from cis2019";
                 var gilmo = performTwoNumberQuery(sethQuery);
                 mainPanel.setData(gilmo);
                 mainPanel.setQuery(columnY, columnX);
@@ -200,7 +200,7 @@ public class Main extends JFrame {
         fileMenu.add(item4);
         fileMenu.add(item5);
         fileMenu.add(item6);
-        fileMenu.add(item7);
+        fileMenu.add(item7); 
         
         menuBar.add(fileMenu);
 
